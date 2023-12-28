@@ -27,21 +27,8 @@ def create_pairs_chunk(chunk):
             pairs.append((dwarf, giant))
     return pairs
 
-def create_pairs_multiprocess(employees, num_processes=2):
-    employees = clean_duplicates(employees)
-    random.shuffle(employees)  # Randomize the entire employee list
-
-    chunk_size = len(employees) // num_processes
-    chunks = [employees[i:i + chunk_size] for i in range(0, len(employees), chunk_size)]
-
-    with multiprocessing.Pool(processes=num_processes) as pool:
-        all_pairs = pool.map(create_pairs_chunk, chunks)
-
-    all_pairs = [pair for chunk_pairs in all_pairs for pair in chunk_pairs]  # Flatten the list
-    return all_pairs
-
 def run():
-    employees = [
+	employees = [
 		{
 			"department": "R&D",
 			"name": "Nikolas Porter",
@@ -579,9 +566,18 @@ def run():
 		}
 	]
 
-    pairs = create_pairs_multiprocess(employees, num_processes=2)
+    # Clean duplicates before splitting into chunks
+	employees = clean_duplicates(employees)
 
-    print("Generated pairs:", pairs)
+	num_processes = 2
+	chunk_size = len(employees) // num_processes
+	chunks = [employees[i:i + chunk_size] for i in range(0, len(employees), chunk_size)]
+
+	with multiprocessing.Pool(processes=num_processes) as pool:
+		all_pairs = pool.map(create_pairs_chunk, chunks)
+
+	all_pairs = [pair for chunk_pairs in all_pairs for pair in chunk_pairs]  # Flatten the list
+	print("Generated pairs:", all_pairs)
 
 if __name__ == "__main__":
     run()
