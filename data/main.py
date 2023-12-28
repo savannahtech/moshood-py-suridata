@@ -568,11 +568,12 @@ def run():
 
     # Clean duplicates before splitting into chunks
 	employees = clean_duplicates(employees)
-	random.shuffle(employees)  # Randomize the entire employee list
 
 	num_processes = 2
 	chunk_size = len(employees) // num_processes
 	chunks = [employees[i:i + chunk_size] for i in range(0, len(employees), chunk_size)]
+
+	random.shuffle(chunks)  # Shuffle the chunks
 
 	with multiprocessing.Pool(processes=num_processes) as pool:
 		all_pairs = pool.map(create_pairs_chunk, chunks)
