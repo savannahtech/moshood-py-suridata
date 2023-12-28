@@ -3,12 +3,12 @@ import multiprocessing
 
 
 def clean_duplicates(employees):
-    seen = set()
+    seen = {}
     cleaned = []
     for emp in employees:
         emp_tuple = (emp['department'], emp['name'], emp['age'])
         if emp_tuple not in seen:
-            seen.add(emp_tuple)
+            seen[emp_tuple] = True
             cleaned.append(emp)
     return cleaned
 
