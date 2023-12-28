@@ -13,12 +13,12 @@ def clean_duplicates(employees):
     return cleaned
 
 def create_pairs_chunk(chunk):
-    random.shuffle(chunk)  # Randomize within each chunk
     pairs = []
     num_employees = len(chunk)
+    
     for i in range(num_employees):
         dwarf = chunk[i]['name']
-        giant_index = (i + num_employees // 2) % num_employees  # Ensure each employee serves as both a dwarf and a giant
+        giant_index = (i + 1) % num_employees  # Ensure each employee serves as both a dwarf and a giant
         
         giant = chunk[giant_index]['name']
         
@@ -568,6 +568,7 @@ def run():
 
     # Clean duplicates before splitting into chunks
 	employees = clean_duplicates(employees)
+	random.shuffle(employees)  # Randomize the entire employee list
 
 	num_processes = 2
 	chunk_size = len(employees) // num_processes
